@@ -77,7 +77,7 @@ class Reg(object):
 		# Fuck it, a random number is good enough, just hash
 		# the current time and use the first 8 characters in base32 representation.
 		# HMAC it with a server secret to discourage guessing. >_>
-		timestamp = str(time.time())
+		timestamp = str(time.strftime('%Y%m%d-%H%M%S'))
 		photoset_tag = base64.b32encode( hmac.new(HMAC_KEY, timestamp, hashlib.sha1).digest() )[:8]
 
 		# Make it easier to read
