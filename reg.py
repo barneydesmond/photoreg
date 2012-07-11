@@ -8,6 +8,8 @@ try:
 	import json
 except:
 	import simplejson as json
+import cups
+
 from werkzeug.wrappers import Request, Response
 from werkzeug.routing import Map, Rule
 from werkzeug.exceptions import HTTPException, NotFound
@@ -15,14 +17,31 @@ from werkzeug.wsgi import SharedDataMiddleware
 from werkzeug.utils import redirect
 from jinja2 import Environment, FileSystemLoader
 
+ZPL_TEMPLATE = """^XA
+^CFD,18,10
+^FO50,200
+^FDName: %(name)s^FS
+^FO50,225
+^FDPhotoset tag: %(photoset_tag_pretty)s^FS
+^FO50,250
+^FDPickup URL: %(photoset_url)s^FS
+^XZ"""
+
 try:
 	URL_STEM = os.environ['PHOTOREG_URL_STEM']
 	HMAC_KEY = os.environ['PHOTOREG_HMAC_KEY']
 	LISTEN_HOST = os.environ['PHOTOREG_LISTEN_HOST']
 	LISTEN_PORT = int(os.environ['PHOTOREG_LISTEN_PORT'])
 	RECORD_DIR = os.environ['PHOTOREG_RECORD_DIR']
+	PRINTER_NAME = os.environ['PHOTOREG_PRINTER_NAME']
 except:
-	print "PHOTOREG_URL_STEM, PHOTOREG_HMAC_KEY, LISTEN_HOST, LISTEN_PORT must be set in the environment before running this"
+	print "Environment variables must be set in the environment before running:"
+	print " * PHOTOREG_URL_STEM"
+	print " * PHOTOREG_HMAC_KEY"
+	print " * PHOTOREG_LISTEN_HOST"
+	print " * PHOTOREG_LISTEN_PORT"
+	print " * PHOTOREG_RECORD_DIR"
+	print " * PHOTOREG_PRINTER_NAME"
 	raise
 
 
@@ -92,7 +111,8 @@ class Reg(object):
 		photoset_url = "%s%s" % (URL_STEM, photoset_tag)
 
 		# Actually put the data somewhere
-		output_file = os.path.join(RECORD_DIR, "%s.json" % timestamp)
+		output_file_json = os.path.join(RECORD_DIR, "%s.json" % timestamp)
+		output_file_zpl  = os.path.join(RECORD_DIR, "%s.zpl"  % timestamp)
 		the_data = {
 			"name":name,
 			"email":email,
@@ -103,12 +123,20 @@ class Reg(object):
 			"photoset_url":photoset_url,
 			"photoset_tag_pretty":photoset_tag_pretty,
 		}
-		f = open(output_file, "wb")
+		f = open(output_file_json, "wb")
 		f.write( json.dumps(the_data) )
 		f.flush()
 		f.close()
 
-		# XXX: Print the label
+		f = open(output_file_zpl, "wb")
+		f.write( ZPL_TEMPLATE % the_data  )
+		f.flush()
+		f.close()
+
+		# Print the label
+		print_options = { "raw":"lolyesplz" }
+		printer = cups.Connection()
+		printer.printFile( unicode(PRINTER_NAME), output_file_zpl, photoset_tag_pretty, print_options )
 
 		return self.render_template('process_rego_POST.html', error=error, url=url,
 			name=name,
@@ -119,6 +147,7 @@ class Reg(object):
 			gave_consent=gave_consent,
 			photoset_url=photoset_url,
 			photoset_tag_pretty=photoset_tag_pretty,
+			zpl_markup=ZPL_TEMPLATE % the_data,
 		)
 
 	def on_view_all(self, request):
