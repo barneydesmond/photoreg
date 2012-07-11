@@ -1,3 +1,7 @@
+# Installation prerequisites
+* python-cups bindings
+* virtualenv
+
 # Getting started
 
 1. Setup a **new virtualenv** somewhere and **activate** it
