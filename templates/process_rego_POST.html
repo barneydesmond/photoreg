@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block title %}Processing your rego...{% endblock %}
+
+{% block body %}
+
+
+<p>
+Being awesome nau! Spit out the submitted details here:
+	<pre>
+	Name: {{ name }}
+	Email: {{ email }}
+	Mobile: {{ mobile }}
+	Character details: {{ character_details }}
+	Gave consent: {{ gave_consent }}
+	</pre>
+</p>
+
+<hr />
+
+<p>
+Here's the photoset tag stuff now:
+	<pre>
+	URL: {{ photoset_url }}
+	Your photoset tag: {{ photoset_tag_pretty }}
+	</pre>
+</p>
+
+<hr />
+
+<p>
+Now it's time for some printer markup, print that label!
+	<pre>
+	Markup goes here...
+	</pre>
+</p>
+
+<hr />
+
+<p>
+Done here? Maybe you want to go back and <a href="/">submit another rego</a>.
+</p>
+
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+{% block title %}New session rego{% endblock %}
+{% block body %}
+
+<div id="container">
+	<div id="header">
+		<h1>SMASH Photobooth registration</h1>
+	</div>
+
+	<div id="content">
+
+		<div id="signup">
+
+			<h2>Sign up</h2>
+
+			<form id="new_rego" accept-charset="UTF-8" method="POST" action="/process_rego" enctype="multipart/form-data">
+
+				<div>
+					<label for="name">Name/nickname</label>
+					<input type="text" name="name" id="name">
+				</div>
+
+				<div>
+					<label for="email">Email</label>
+					<input type="text" name="email" id="email">
+				</div>
+
+				<div>
+					<label for="mobile">Mobile</label>
+					<input type="text" name="mobile" id="mobile">
+				</div>
+
+				<div>
+					<label for="series">Series/Game/Genre</label>
+					<input type="text" name="series" id="series">
+				</div>
+
+				<div>
+					<label for="character_details">Which character/s are you cosplaying?</label>
+					<textarea name="character_details" id="character_details"></textarea>
+				</div>
+
+				<div>
+					<label>I have read the disclaimer and understand the terms and conditions</label><span style="display:none;">Stop the label+input CSS from kicking in</span>
+					<input type="radio" value="yes" name="gave_consent" id="gave_consent_yes" /><label for="gave_consent_yes" style="display:inline-block;">Yes</label><br />
+					<input type="radio" value="no" name="gave_consent" id="gave_consent_no" checked="no" /><label for="gave_consent_no" style="display:inline-block;">No</label><br />
+				</div>
+
+				<div>
+					<input type="submit" value="Submit" id="submit" />
+				</div>
+
+			</form>
+
+		</div> <!-- signup -->
+
+		<div id="disclaimer">
+			<h2>Disclaimer</h2>
+			<p>NB: Your details are used <em>only</em> to so we can send you download links for your photos</p>
+		</div> <!-- disclaimer -->
+
+	</div> <!-- content -->
+
+</div> <!-- container -->
+
+{% endblock %}

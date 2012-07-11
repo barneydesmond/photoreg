@@ -1,0 +1,49 @@
+label {
+	display: block;
+}
+label.valid {
+	width: 24px;
+	background: url(/static/valid.png) center center no-repeat;
+	display: inline-block;
+	text-indent: -9999px;
+}
+
+label.error {
+	padding-left: 5px;
+	display: inline-block;
+}
+
+input {
+	display: inline-block;
+}
+
+form div {
+	padding: 5px;
+	float: left;
+	clear: left;
+	width: 100%;
+}
+
+button {
+	margin-top: 10px;
+}
+
+label+input {
+	width:300px;
+	text-align: left;
+}
+
+#character_details {
+	height: 100px;
+	width: 300px;
+}
+
+#gave_consent_yes, #gave_consent_no {
+	margin-left: 0px;
+}
+
+/* The headers are being a dick */
+#submit {
+	margin-bottom: 2em;
+}
+
