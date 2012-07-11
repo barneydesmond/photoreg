@@ -11,8 +11,14 @@ from werkzeug.wsgi import SharedDataMiddleware
 from werkzeug.utils import redirect
 from jinja2 import Environment, FileSystemLoader
 
-URL_STEM = 'http://photos.smash.org.au/'
-HMAC_KEY = 'rvA7YTtGHpUlKFR5yC9Bbb2QWO9crUhSz9VQ'
+try:
+	URL_STEM = os.environ['PHOTOREG_URL_STEM']
+	HMAC_KEY = os.environ['PHOTOREG_HMAC_KEY']
+	LISTEN_HOST = os.environ['PHOTOREG_LISTEN_HOST']
+	LISTEN_PORT = int(os.environ['PHOTOREG_LISTEN_PORT'])
+except:
+	print "PHOTOREG_URL_STEM, PHOTOREG_HMAC_KEY, LISTEN_HOST, LISTEN_PORT must be set in the environment before running this"
+	raise
 
 
 class Reg(object):
@@ -113,5 +119,5 @@ def create_app(with_static=True):
 if __name__ == '__main__':
 	from werkzeug.serving import run_simple
 	app = create_app()
-	run_simple('202.4.224.29', 4001, app, use_debugger=True, use_reloader=True)
+	run_simple(LISTEN_HOST, LISTEN_PORT, app, use_debugger=True, use_reloader=True)
 
