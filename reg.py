@@ -4,7 +4,10 @@ import time
 import hmac
 import hashlib
 import base64
-import simplejson as json
+try:
+	import json
+except:
+	import simplejson as json
 from werkzeug.wrappers import Request, Response
 from werkzeug.routing import Map, Rule
 from werkzeug.exceptions import HTTPException, NotFound
