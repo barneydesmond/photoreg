@@ -4,6 +4,7 @@ import time
 import hmac
 import hashlib
 import base64
+import simplejson as json
 from werkzeug.wrappers import Request, Response
 from werkzeug.routing import Map, Rule
 from werkzeug.exceptions import HTTPException, NotFound
@@ -87,7 +88,22 @@ class Reg(object):
 		# Generate the URL
 		photoset_url = "%s%s" % (URL_STEM, photoset_tag)
 
-		# XXX: Actually put the data somewhere
+		# Actually put the data somewhere
+		output_file = os.path.join(RECORD_DIR, "%s.json" % timestamp)
+		the_data = {
+			"name":name,
+			"email":email,
+			"mobile":mobile,
+			"series":series,
+			"character_details":character_details,
+			"gave_consent":gave_consent,
+			"photoset_url":photoset_url,
+			"photoset_tag_pretty":photoset_tag_pretty,
+		}
+		f = open(output_file, "wb")
+		f.write( json.dumps(the_data) )
+		f.flush()
+		f.close()
 
 		# XXX: Print the label
 
