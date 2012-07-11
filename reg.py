@@ -16,6 +16,7 @@ try:
 	HMAC_KEY = os.environ['PHOTOREG_HMAC_KEY']
 	LISTEN_HOST = os.environ['PHOTOREG_LISTEN_HOST']
 	LISTEN_PORT = int(os.environ['PHOTOREG_LISTEN_PORT'])
+	RECORD_DIR = os.environ['PHOTOREG_RECORD_DIR']
 except:
 	print "PHOTOREG_URL_STEM, PHOTOREG_HMAC_KEY, LISTEN_HOST, LISTEN_PORT must be set in the environment before running this"
 	raise
