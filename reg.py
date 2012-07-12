@@ -18,13 +18,32 @@ from werkzeug.utils import redirect
 from jinja2 import Environment, FileSystemLoader
 
 ZPL_TEMPLATE = """^XA
-^CFD,18,10
-^FO50,200
-^FDName: %(name)s^FS
-^FO50,225
-^FDPhotoset tag: %(photoset_tag_pretty)s^FS
-^FO50,250
-^FDPickup URL: %(photoset_url)s^FS
+^MUD,100,100
+
+^FO12,12
+^GB510,281,2,B,2
+^FS
+
+^FO40,40
+^A0N,45,40
+^FD%(name)s^FS
+
+^FO80,100
+^ADN,18,10
+^BCN,50,Y,N,N,A
+^FD%(photoset_tag)s^FS
+
+^FO40,200
+^A0N,35,28
+^FDPickup URL^FS
+^FO45,240
+^ADN,18,10
+^FD%(photoset_url)s^FS
+
+^FO545,40
+^BQN,2,5,M,A
+^FDMA,%(photoset_url)s^FS
+
 ^XZ"""
 
 try:
@@ -105,7 +124,7 @@ class Reg(object):
 		photoset_tag = base64.b32encode( hmac.new(HMAC_KEY, timestamp, hashlib.sha1).digest() )[:8]
 
 		# Make it easier to read
-		photoset_tag_pretty = photoset_tag[:4] + '-' + photoset_tag[4:]
+		photoset_tag_pretty = photoset_tag[:3] + '-' + photoset_tag[3:5] + '-' + photoset_tag[5:]
 
 		# Generate the URL
 		photoset_url = "%s%s" % (URL_STEM, photoset_tag)
@@ -121,6 +140,7 @@ class Reg(object):
 			"character_details":character_details,
 			"gave_consent":gave_consent,
 			"photoset_url":photoset_url,
+			"photoset_tag":photoset_tag,
 			"photoset_tag_pretty":photoset_tag_pretty,
 		}
 		f = open(output_file_json, "wb")
@@ -146,6 +166,7 @@ class Reg(object):
 			character_details=character_details,
 			gave_consent=gave_consent,
 			photoset_url=photoset_url,
+			photoset_tag=photoset_tag,
 			photoset_tag_pretty=photoset_tag_pretty,
 			zpl_markup=ZPL_TEMPLATE % the_data,
 		)
