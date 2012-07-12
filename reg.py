@@ -63,6 +63,8 @@ except:
 	print " * PHOTOREG_PRINTER_NAME"
 	raise
 
+DISABLE_PRINTING = os.environ.get('PHOTOREG_DISABLE_PRINTING')
+
 
 class Reg(object):
 	def __init__(self):
@@ -154,9 +156,10 @@ class Reg(object):
 		f.close()
 
 		# Print the label
-		print_options = { "raw":"lolyesplz" }
-		printer = cups.Connection()
-		printer.printFile( unicode(PRINTER_NAME), output_file_zpl, photoset_tag_pretty, print_options )
+		if DISABLE_PRINTING is not None:
+			print_options = { "raw":"lolyesplz" }
+	 		printer = cups.Connection()
+			printer.printFile( unicode(PRINTER_NAME), output_file_zpl, photoset_tag_pretty, print_options )
 
 		return self.render_template('process_rego_POST.html', error=error, url=url,
 			name=name,
