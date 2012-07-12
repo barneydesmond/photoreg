@@ -156,7 +156,7 @@ class Reg(object):
 		f.close()
 
 		# Print the label
-		if DISABLE_PRINTING is not None:
+		if DISABLE_PRINTING is None:
 			print_options = { "raw":"lolyesplz" }
 	 		printer = cups.Connection()
 			printer.printFile( unicode(PRINTER_NAME), output_file_zpl, photoset_tag_pretty, print_options )
