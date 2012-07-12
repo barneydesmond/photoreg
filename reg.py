@@ -1,3 +1,4 @@
+import sys
 import os
 import urlparse
 import time
@@ -63,7 +64,12 @@ except:
 	print " * PHOTOREG_PRINTER_NAME"
 	raise
 
-DISABLE_PRINTING = os.environ.get('PHOTOREG_DISABLE_PRINTING')
+if os.environ.get('PHOTOREG_DISABLE_PRINTING') is not None:
+	sys.stderr.write("Printing is DISABLED\nUnset PHOTOREG_DISABLE_PRINTING in the environment to enable printing.\n\n")
+	ENABLE_PRINTING = False
+else:
+	sys.stderr.write("Printing is enabled\n\n")
+	ENABLE_PRINTING = True
 
 
 class Reg(object):
@@ -156,7 +162,7 @@ class Reg(object):
 		f.close()
 
 		# Print the label
-		if DISABLE_PRINTING is None:
+		if ENABLE_PRINTING:
 			print_options = { "raw":"lolyesplz" }
 	 		printer = cups.Connection()
 			printer.printFile( unicode(PRINTER_NAME), output_file_zpl, photoset_tag_pretty, print_options )
